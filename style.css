@@ -123,11 +123,32 @@ h3 {
     cursor: pointer;
     transition: all 0.3s ease;
 }
-    
+
 .card-images img:hover, .copied-images img:hover {
     transform: scale(1.3);
 } 
 
+.animated-clone {
+    position: absolute;
+    width: 6%;
+    border-radius: 10px;
+    border: 2px solid white;
+    height: auto;
+    transition: all 0.5s ease;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.animated-clone-back {
+    position: absolute;
+    width: 7%;
+    border-radius: 10px;
+    border: 2px solid black;
+    height: auto;
+    transition: all 0.5s ease;
+    pointer-events: none;
+    z-index: 1000;
+}
     
 .red-tier .card-images img {
     box-shadow: 0 0 11px red;
@@ -190,6 +211,7 @@ h3 {
 .color-penalty {
     color: purple;
 }
+
 
 /* #screenshot-button {
     display: flex;
