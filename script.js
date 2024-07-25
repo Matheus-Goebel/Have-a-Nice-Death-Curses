@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
             copiedImg.style.opacity = '1.0';
             copiedImg.setAttribute('data-box-shadow', originalBoxShadow);
             copiedImg.style.boxShadow = originalBoxShadow;
+            copiedImg.style.border= '2px solid black';
             copiedImagesMap[src] = copiedImg;
 
             let targetContainer = null;
@@ -78,21 +79,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 targetContainer = existingBoxWithSpace.querySelector('.copied-images');
             } else {
                 targetContainer = createNewCopiedBox();
-            }
-
+            }           
             animateImage(img, copiedImg, targetContainer);
         } else {
             isCopying = false;
         }
     }
-
+  
     function animateImage(originalImg, copiedImg, targetContainer) {
         const originalRect = originalImg.getBoundingClientRect();
         const containerRect = targetContainer.getBoundingClientRect();
         
         const targetPosition = calculateTargetPosition(targetContainer);
 
-        const clone = originalImg.cloneNode();
+        const clone = copiedImg.cloneNode();
         document.body.appendChild(clone);
         clone.classList.add('animated-clone');
         clone.style.left = `${originalRect.left}px`;
@@ -103,14 +103,35 @@ document.addEventListener('DOMContentLoaded', function() {
             const translateY = containerRect.top + targetPosition.y - originalRect.top;
             clone.style.transform = `translate(${translateX}px, ${translateY}px)`;
         });
-
+        
         clone.addEventListener('transitionend', () => {
             targetContainer.appendChild(copiedImg);
             document.body.removeChild(clone);
             isCopying = false;
         });
     }
+    
+    function animateImageBack(copiedImg, originalImg) {
+        const copiedRect = copiedImg.getBoundingClientRect();
+        const originalRect = originalImg.getBoundingClientRect();
+        
+        const clone = copiedImg.cloneNode();
+        document.body.appendChild(clone);
+        clone.classList.add('animated-clone-back');
+        clone.style.left = `${copiedRect.left}px`;
+        clone.style.top = `${copiedRect.top}px`;
+        
+        requestAnimationFrame(() => {
+            const translateX = originalRect.left - copiedRect.left;
+            const translateY = originalRect.top - copiedRect.top;
+            clone.style.transform = `translate(${translateX}px, ${translateY}px)`;
+        });
 
+        clone.addEventListener('transitionend', () => {
+            document.body.removeChild(clone);
+        });
+    }
+  
     function calculateTargetPosition(container) {
         const images = container.querySelectorAll('img');
         const row = Math.floor(images.length / 5);
@@ -150,9 +171,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     copiedBoxes = document.querySelectorAll('.copied-box');
                     currentCopiedBox = Math.max(0, currentCopiedBox - 1);
-                    
-                    copiedBoxes.forEach((box, i) => {
-                        box.querySelector('h3').textContent = `All The Curses You Selected (${i + 1})`;
+
+                    copiedBoxes.forEach((i) => {
+                        box.innerHTML = `<h3><span class="color-yellow">All</span> The <span class="color-yellow">Curses</span> You <span class="color-yellow">Selected</span> (${i + 1})</h3><div class="copied-images"></div>`;
                     });
                     showBox(copiedBoxes, copiedBoxes.length - 1);
                 }
@@ -163,33 +184,12 @@ document.addEventListener('DOMContentLoaded', function() {
             delete copiedImagesMap[src];
         }
     }
-
-    function animateImageBack(copiedImg, originalImg) {
-        const copiedRect = copiedImg.getBoundingClientRect();
-        const originalRect = originalImg.getBoundingClientRect();
-
-        const clone = copiedImg.cloneNode();
-        document.body.appendChild(clone);
-        clone.classList.add('animated-clone-back');
-        clone.style.left = `${copiedRect.left}px`;
-        clone.style.top = `${copiedRect.top}px`;
-
-        requestAnimationFrame(() => {
-            const translateX = originalRect.left - copiedRect.left;
-            const translateY = originalRect.top - copiedRect.top;
-            clone.style.transform = `translate(${translateX}px, ${translateY}px)`;
-        });
-
-        clone.addEventListener('transitionend', () => {
-            document.body.removeChild(clone);
-        });
-    }
-
+    
     function createNewCopiedBox() {
         currentCopiedBox++;
         const newCopiedBox = document.createElement('div');
         newCopiedBox.classList.add('copied-box');
-        newCopiedBox.innerHTML = `<h3>All The Curses You Selected (${copiedBoxes.length + 1})</h3><div class="copied-images"></div>`;
+        newCopiedBox.innerHTML = `<h3><span class="color-yellow">All</span> The <span class="color-yellow">Curses</span> You <span class="color-yellow">Selected</span> (${copiedBoxes.length + 1})</h3><div class="copied-images"></div>`;
         document.querySelector('.container').appendChild(newCopiedBox);
         copiedBoxes = document.querySelectorAll('.copied-box');
         showBox(copiedBoxes, currentCopiedBox);

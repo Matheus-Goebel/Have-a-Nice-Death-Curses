@@ -19,6 +19,7 @@ body {
     justify-content: center;
     align-items: flex-start;
     min-height: 90vh;
+    z-index: 1;
 }
 
 .card-box {
@@ -29,6 +30,7 @@ body {
     display: none;
     margin-left: 30px;
     background-color: black;
+    position: relative;
 }
 
 .copied-box {
@@ -37,31 +39,68 @@ body {
     padding: 20px; 
     background-color: black;
     border-radius: 8px;
-    box-shadow: 0 0 20px yellow;
     max-width: 580px;
     display: none;
-    margin-left: 15px;
-}  
+    margin-left: -5px;
+    position: relative;
+}
 
 .card-box.active, .copied-box.active {
     display: block;
 }
 
-.red-tier {
-    box-shadow: 0 0 20px red;
+@property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
 }
 
-.blue-tier {
-    box-shadow: 0 0 20px blue;
+.card-box::after, .card-box::before, .copied-box::after, .copied-box::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 50%;
+    left: 50%;    
+    translate: -50% -50%;
+    z-index: -1;
+    padding: 2px;
+    border-radius: 10px;    
 }
 
-.green-tier {
-    box-shadow: 0 0 20px green;
+.card-box::after, .card-box::before {
+    background-image: conic-gradient(from var(--angle), red, blue, green, purple);
+    animation: 5s spin linear infinite;
 }
 
-.penalty-tier {
-    box-shadow: 0 0 20px purple;
+.copied-box::after, .copied-box::before {
+    background-image: conic-gradient(from var(--angle), purple, green, blue, red);
+    animation: 5s spin-reverse linear infinite;
 }
+
+.card-box::before, .copied-box::before {
+    filter: blur(1.2rem);
+    opacity: 0.8;
+}
+
+@keyframes spin {
+    from {
+        --angle: 0deg;
+    }
+    to {
+        --angle: 360deg;
+    }
+}
+
+@keyframes spin-reverse {
+    from {
+        --angle: 360deg;
+    }
+    to {
+        --angle: 0deg;
+    }
+}
+
 
 .red-tier h2 {
     border-bottom: 2px solid red;
@@ -79,23 +118,16 @@ body {
     border-bottom: 2px solid purple;
 }
 
-h2 {
+h2, h3 {
     color: white;    
     margin-bottom: 15px;
-    font-size: 34px;
+    font-size: 2.4rem;
     font-weight: bold;
     text-align: center;
 }
 
-h3 {
-    background: linear-gradient(to right, red, blue, green, purple);
-    background-clip: text;
-    color: transparent;
+h3 {   
     border-bottom: 2px solid yellow;
-    margin-bottom: 15px;
-    font-size: 34px;
-    font-weight: bold;
-    text-align: center;
 }
 
 .card-images, .copied-images {
@@ -125,7 +157,7 @@ h3 {
 }
 
 .card-images img:hover, .copied-images img:hover {
-    transform: scale(1.3);
+    transform: scale(1.2);
 } 
 
 .animated-clone {
@@ -145,7 +177,7 @@ h3 {
     border-radius: 10px;
     border: 2px solid black;
     height: auto;
-    transition: all 0.5s ease;
+    transition: all 1s ease;
     pointer-events: none;
     z-index: 1000;
 }
@@ -171,45 +203,73 @@ h3 {
     justify-content: center;
     gap: 10px;
     margin-top: 390px;
+    border-radius: 20px;
+    background-color: transparent;
 }
 
 .controls button, .copy-controls button {
     background-color: black;
     white-space: nowrap;
     color: white;
-    box-shadow: 0 0 20px red;
-    border: 2px solid white;
+    box-shadow: 0 0 10px red;
+    border: 3px solid white;
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 20px;
-    transition: all 0.5s ease;
-    font-size: 14px;
+    font-size: 0.9rem;
     font-weight: bold;
+    transition: all 0.5s ease;
 }
 
 .controls button:hover, .copy-controls button:hover {
-    background-color:black;
-    color: red;
-    border: 2px solid red;
-    box-shadow: 0 0 20px white;
+    color: black;
+    border: 3px solid red;
+    box-shadow: 0 0 10px white;
     transform: scale(1.1);
-    transition: all 0.5s ease;    
+    text-shadow: -1px -1px 3px red,  
+    1px -1px 3px red,
+    -1px 1px 3px red,
+    1px 1px 3px red;
 }
 
 .color-red {
-    color: red;
+    color: black;
+    text-shadow: -1px -1px 10px red,  
+    1px -1px 10px red,
+    -1px 1px 10px red,
+    1px 1px 10px red;
 }
 
 .color-blue {
-    color: blue;
+    color: black;
+    text-shadow: -1px -1px 10px blue,  
+    1px -1px 10px blue,
+    -1px 1px 10px blue,
+    1px 1px 10px blue;
 }
 
 .color-green {
-    color: green;
+    color: black;
+    text-shadow: -1px -1px 10px green,  
+    1px -1px 10px green,
+    -1px 1px 10px green,
+    1px 1px 10px green;
 }
 
 .color-penalty {
-    color: purple;
+    color: black;
+    text-shadow: -1px -1px 10px purple,  
+    1px -1px 10px purple,
+    -1px 1px 10px purple,
+    1px 1px 10px purple;
+}
+
+.color-yellow {
+    color: black;
+    text-shadow: -1px -1px 10px yellow,  
+    1px -1px 10px yellow,
+    -1px 1px 10px yellow,
+    1px 1px 10px yellow;
 }
 
 
