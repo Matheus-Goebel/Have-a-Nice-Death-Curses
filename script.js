@@ -66,7 +66,10 @@ document.addEventListener('DOMContentLoaded', function() {
             copiedImg.setAttribute('data-box-shadow', originalBoxShadow);
             copiedImg.style.boxShadow = originalBoxShadow;
             copiedImg.style.border= '2px solid black';
-            copiedImagesMap[src] = copiedImg;
+            copiedImagesMap[src] = {
+                element: copiedImg,
+                position: null
+            };
 
             let targetContainer = null;
 
@@ -79,58 +82,65 @@ document.addEventListener('DOMContentLoaded', function() {
                 targetContainer = existingBoxWithSpace.querySelector('.copied-images');
             } else {
                 targetContainer = createNewCopiedBox();
-            }           
+            }        
             animateImage(img, copiedImg, targetContainer);
         } else {
             isCopying = false;
         }
-    }
-  
+    }  
+
     function animateImage(originalImg, copiedImg, targetContainer) {
         const originalRect = originalImg.getBoundingClientRect();
         const containerRect = targetContainer.getBoundingClientRect();
-        
+    
         const targetPosition = calculateTargetPosition(targetContainer);
-
+    
         const clone = copiedImg.cloneNode();
         document.body.appendChild(clone);
         clone.classList.add('animated-clone');
-        clone.style.left = `${originalRect.left}px`;
-        clone.style.top = `${originalRect.top}px`;        
-
+        clone.style.left = `${originalRect.left + window.scrollX}px`;
+        clone.style.top = `${originalRect.top + window.scrollY}px`;
+    
         requestAnimationFrame(() => {
             const translateX = containerRect.left + targetPosition.x - originalRect.left;
             const translateY = containerRect.top + targetPosition.y - originalRect.top;
             clone.style.transform = `translate(${translateX}px, ${translateY}px)`;
+    
+            copiedImagesMap[copiedImg.src].position = {
+                left: containerRect.left + targetPosition.x + window.scrollX,
+                top: containerRect.top + targetPosition.y + window.scrollY
+            };
         });
-        
+    
         clone.addEventListener('transitionend', () => {
             targetContainer.appendChild(copiedImg);
             document.body.removeChild(clone);
             isCopying = false;
         });
     }
-    
+   
     function animateImageBack(copiedImg, originalImg) {
-        const copiedRect = copiedImg.getBoundingClientRect();
         const originalRect = originalImg.getBoundingClientRect();
-        
+        let storedPosition = copiedImg.getBoundingClientRect();
+        if (storedPosition.left === 0){
+            storedPosition = copiedImagesMap[copiedImg.src].position;
+        } 
         const clone = copiedImg.cloneNode();
         document.body.appendChild(clone);
         clone.classList.add('animated-clone-back');
-        clone.style.left = `${copiedRect.left}px`;
-        clone.style.top = `${copiedRect.top}px`;
-        
+        clone.style.left = `${storedPosition.left}px`;
+        clone.style.top = `${storedPosition.top}px`;
+    
         requestAnimationFrame(() => {
-            const translateX = originalRect.left - copiedRect.left;
-            const translateY = originalRect.top - copiedRect.top;
+            const translateX = originalRect.left + window.scrollX - storedPosition.left;
+            const translateY = originalRect.top + window.scrollY - storedPosition.top;
             clone.style.transform = `translate(${translateX}px, ${translateY}px)`;
         });
-
+    
         clone.addEventListener('transitionend', () => {
             document.body.removeChild(clone);
         });
-    }
+    }    
   
     function calculateTargetPosition(container) {
         const images = container.querySelectorAll('img');
@@ -138,8 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const col = images.length % 5;
         const offset = 8; 
         return {
-            x: col * (109 + offset),
-            y: row * (170 + offset)
+            x: col * (111 + offset),
+            y: row * (166 + offset)
         };
     }
 
@@ -156,7 +166,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 if (boxImages.children.length < 20 && index < copiedBoxes.length - 1) {
                     let nextBoxImages = copiedBoxes[index + 1].querySelector('.copied-images').children;
-                    showBox(copiedBoxes, currentCopiedBox);
                     while (boxImages.children.length < 20 && nextBoxImages.length > 0) {
                         boxImages.appendChild(nextBoxImages[0]);
                     }
@@ -175,7 +184,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     copiedBoxes.forEach((i) => {
                         box.innerHTML = `<h3><span class="color-yellow">All</span> The <span class="color-yellow">Curses</span> You <span class="color-yellow">Selected</span> (${i + 1})</h3><div class="copied-images"></div>`;
                     });
-                    showBox(copiedBoxes, copiedBoxes.length - 1);
                 }
             });
             if (copiedBoxes.length > 0) {

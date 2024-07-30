@@ -18,7 +18,7 @@ body {
     gap: 20px;
     justify-content: center;
     align-items: flex-start;
-    min-height: 90vh;
+    min-height: 90vmin;
     z-index: 1;
 }
 
@@ -137,9 +137,8 @@ h3 {
 }
 
 .card-images img {
-    width: 100%;
-    height: auto;
-    max-width: 200px;
+    width: 11vmin;
+    height: 17vmin;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -147,8 +146,8 @@ h3 {
 }
 
 .copied-images img {
-    width: 100%;
-    height: auto;
+    width: 11vmin;
+    height: 17vmin;
     max-width: 200px;
     border: 2px solid black;
     border-radius: 10px;
@@ -162,7 +161,7 @@ h3 {
 
 .animated-clone {
     position: absolute;
-    width: 6%;
+    width: 11vmin;
     border-radius: 10px;
     border: 2px solid white;
     height: auto;
@@ -173,7 +172,7 @@ h3 {
 
 .animated-clone-back {
     position: absolute;
-    width: 7%;
+    width: 13vmin;
     border-radius: 10px;
     border: 2px solid black;
     height: auto;
