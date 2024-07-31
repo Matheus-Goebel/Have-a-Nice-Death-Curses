@@ -31,6 +31,58 @@ function nextCopiedBox() {
     showBox(copiedBoxes, currentCopiedBox);
 }
 
+function takeScreenshot() {
+    const copiedBoxes = document.querySelectorAll('.copied-box');
+    if (copiedBoxes.length === 0) return;
+
+    const promises = [];
+    const originalVisibility = [];
+
+    copiedBoxes.forEach((box, index) => {
+        originalVisibility[index] = box.style.display;
+        box.style.display = 'block'; 
+        promises.push(domtoimage.toPng(box));
+    });
+
+    Promise.all(promises)
+        .then(images => Promise.all(images.map(src => {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = src;
+            });
+        })))
+        .then(imgElements => {
+            const padding = 20; 
+            const maxWidth = Math.max(...imgElements.map(img => img.width + padding * 2));
+            const totalHeight = imgElements.reduce((sum, img) => sum + img.height + padding * 2, 0);
+            const combinedCanvas = document.createElement('canvas');
+            combinedCanvas.width = maxWidth;
+            combinedCanvas.height = totalHeight;
+            const context = combinedCanvas.getContext('2d');
+
+            let yOffset = 0;
+            imgElements.forEach(img => {
+                const xOffset = (combinedCanvas.width - img.width - padding * 2) / 2;
+                context.drawImage(img, xOffset, yOffset + padding);
+                yOffset += img.height + padding;
+            });
+
+            const imgData = combinedCanvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = imgData;
+            link.download = 'combined-screenshot.png';
+            link.click();
+        })
+        .catch(error => console.error('Error capturing images:', error))
+        .finally(() => {
+            copiedBoxes.forEach((box, index) => {
+                box.style.display = originalVisibility[index];
+            });
+        });
+}
+
 showBox(cardBoxes, currentCardBox);
 showBox(copiedBoxes, currentCopiedBox);
 

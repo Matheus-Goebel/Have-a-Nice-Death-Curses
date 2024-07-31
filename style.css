@@ -23,6 +23,7 @@ body {
 }
 
 .card-box {
+    order: 0;
     width: 100%;
     padding: 20px;
     border-radius: 8px;
@@ -206,7 +207,7 @@ h3 {
     background-color: transparent;
 }
 
-.controls button, .copy-controls button {
+.controls button, .copy-controls button, #screenshot-button button {
     background-color: black;
     white-space: nowrap;
     color: white;
@@ -220,7 +221,7 @@ h3 {
     transition: all 0.5s ease;
 }
 
-.controls button:hover, .copy-controls button:hover {
+.controls button:hover, .copy-controls button:hover, #screenshot-button button:hover {
     color: black;
     border: 3px solid red;
     box-shadow: 0 0 10px white;
@@ -229,6 +230,15 @@ h3 {
     1px -1px 3px red,
     -1px 1px 3px red,
     1px 1px 3px red;
+}
+
+#screenshot-button {
+    position: absolute;
+    justify-content: center;
+    top: 30%;
+    left: 46%;
+    border-radius: 20px;
+    background-color: transparent;
 }
 
 .color-red {
@@ -270,34 +280,3 @@ h3 {
     -1px 1px 10px yellow,
     1px 1px 10px yellow;
 }
-
-
-/* #screenshot-button {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 380px;
-}
-
-#screenshot-button{
-    background-color: black;
-    white-space: nowrap;
-    color: white;
-    box-shadow: 0 0 20px red;
-    border: 2px solid white;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 20px;
-    transition: all 0.5s ease;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-#screenshot-button:hover {
-    background-color:black;
-    color: red;
-    border: 2px solid red;
-    box-shadow: 0 0 20px white;
-    transform: scale(1.2);
-    transition: all 0.5s ease; 
-} */
