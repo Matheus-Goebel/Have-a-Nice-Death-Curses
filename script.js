@@ -2,6 +2,7 @@ let currentCardBox = 0;
 let currentCopiedBox = 0;
 let copiedBoxes = document.querySelectorAll('.copied-box');
 const cardBoxes = document.querySelectorAll('.card-box');
+const buttons = document.querySelectorAll('button');
 let copiedImagesMap = {};
 let isCopying = false;
 
@@ -10,6 +11,22 @@ function showBox(boxes, index) {
         box.classList.toggle('active', i === index);
     });
 }
+
+buttons.forEach(btn => {
+    btn.addEventListener('click', function(wave) {
+        let x = wave.clientX - wave.target.offsetLeft;
+        let y = wave.clientY - wave.target.offsetTop;
+        
+        let waves = document.createElement('span');
+        waves.style.left = x + 'px';
+        waves.style.top = y + 'px';
+        this.appendChild(waves);
+
+        setTimeout(() => {
+            waves.remove()
+        }, 1000);
+    })
+ });
 
 function prevCardBox() {
     currentCardBox = (currentCardBox > 0) ? currentCardBox - 1 : cardBoxes.length - 1;
@@ -82,23 +99,6 @@ function takeScreenshot() {
             });
         });
 }
-
-const buttons = document.querySelectorAll('button');
- buttons.forEach(btn => {
-    btn.addEventListener('click', function(wave) {
-        let x = wave.clientX - wave.target.offsetLeft;
-        let y = wave.clientY - wave.target.offsetTop;
-        
-        let waves = document.createElement('span');
-        waves.style.left = x + 'px';
-        waves.style.top = y + 'px';
-        this.appendChild(waves);
-
-        setTimeout(() => {
-            waves.remove()
-        }, 1000);
-    })
- });
 
 showBox(cardBoxes, currentCardBox);
 showBox(copiedBoxes, currentCopiedBox);
