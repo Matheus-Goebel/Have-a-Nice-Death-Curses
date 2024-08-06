@@ -205,13 +205,13 @@ h3 {
     margin-top: 390px;
     border-radius: 20px;
     background-color: transparent;
+    
 }
 
-.controls button, .copy-controls button, #screenshot-button button {
-    background-color: black;
+.controls button, .copy-controls button, .screenshot-button button {
+    position: relative;
     white-space: nowrap;
-    color: white;
-    box-shadow: 0 0 10px red;
+    color: white; 
     border: 3px solid white;
     padding: 10px 20px;
     cursor: pointer;
@@ -219,26 +219,79 @@ h3 {
     font-size: 0.9rem;
     font-weight: bold;
     transition: all 0.5s ease;
+    overflow: hidden;    
 }
 
-.controls button:hover, .copy-controls button:hover, #screenshot-button button:hover {
-    color: black;
+button:nth-child(1){
+    box-shadow: 0 0 10px red;
+}
+
+button:nth-child(2){
+    box-shadow: 0 0 10px yellow;
+}
+
+button:hover:nth-child(1){
     border: 3px solid red;
-    box-shadow: 0 0 10px white;
-    transform: scale(1.1);
     text-shadow: -1px -1px 3px red,  
     1px -1px 3px red,
     -1px 1px 3px red,
     1px 1px 3px red;
 }
 
-#screenshot-button {
+button:hover:nth-child(2){    
+    border: 3px solid yellow;
+    text-shadow: -1px -1px 3px yellow,  
+    1px -1px 3px yellow,
+    -1px 1px 3px yellow,
+    1px 1px 3px yellow;
+}
+
+.controls button:hover, .copy-controls button:hover, .screenshot-button button:hover {    
+    transform: scale(1.1); 
+    color: black;   
+}
+
+.screenshot-button {
     position: absolute;
     justify-content: center;
     top: 30%;
     left: 46%;
     border-radius: 20px;
     background-color: transparent;
+}
+
+.screenshot-button button {
+    box-shadow: 0 0 10px blue;
+}
+
+.screenshot-button button:hover {
+    border: 3px solid blue;
+    text-shadow: -1px -1px 3px blue,
+    1px -1px 3px blue,
+    -1px 1px 3px blue,
+    1px 1px 3px blue;    
+}
+
+button span {
+    position: absolute;
+    background:white;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    border-radius: 50%;
+    animation: animate 1s linear infinite;
+}
+
+@keyframes animate {
+    from {
+        width: 0px;
+        height: 0px;
+        opacity: 0.2;
+    }
+    to {
+        width: 270px;
+        height: 270px;
+        opacity: 0;
+    }
 }
 
 .color-red {

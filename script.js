@@ -83,6 +83,23 @@ function takeScreenshot() {
         });
 }
 
+const buttons = document.querySelectorAll('button');
+ buttons.forEach(btn => {
+    btn.addEventListener('click', function(wave) {
+        let x = wave.clientX - wave.target.offsetLeft;
+        let y = wave.clientY - wave.target.offsetTop;
+        
+        let waves = document.createElement('span');
+        waves.style.left = x + 'px';
+        waves.style.top = y + 'px';
+        this.appendChild(waves);
+
+        setTimeout(() => {
+            waves.remove()
+        }, 1000);
+    })
+ });
+
 showBox(cardBoxes, currentCardBox);
 showBox(copiedBoxes, currentCopiedBox);
 
