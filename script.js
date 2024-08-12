@@ -57,8 +57,6 @@ function nextCopiedBox() {
 
 function takeScreenshot() {
     const copiedBoxes = document.querySelectorAll('.copied-box');
-    if (copiedBoxes.length === 0) return;
-
     const promises = [];
     const originalVisibility = [];
 
