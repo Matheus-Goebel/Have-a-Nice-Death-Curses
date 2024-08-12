@@ -12,21 +12,28 @@ function showBox(boxes, index) {
     });
 }
 
-buttons.forEach(btn => {
-    btn.addEventListener('click', function(wave) {
+function addGlobalEventListener(type, selector, callback, parent = document) {
+    parent.addEventListener(type, e => {
+        if (e.target.matches(selector)) {
+            callback(e)
+        }
+    })
+}
+
+addGlobalEventListener("click", "button", wave => {    
         let x = wave.clientX - wave.target.offsetLeft;
         let y = wave.clientY - wave.target.offsetTop;
         
         let waves = document.createElement('span');
         waves.style.left = x + 'px';
         waves.style.top = y + 'px';
-        this.appendChild(waves);
+        wave.target.appendChild(waves);
 
         setTimeout(() => {
             waves.remove()
         }, 1000);
-    })
- });
+    }
+)
 
 function prevCardBox() {
     currentCardBox = (currentCardBox > 0) ? currentCardBox - 1 : cardBoxes.length - 1;
@@ -100,29 +107,22 @@ function takeScreenshot() {
         });
 }
 
-showBox(cardBoxes, currentCardBox);
-showBox(copiedBoxes, currentCopiedBox);
+addGlobalEventListener("click", ".card-box img", e => {
+    toggleImageSelection(e.target);
+})
 
-document.addEventListener('DOMContentLoaded', function() {
-    const images = document.querySelectorAll('.card-box img');
-    images.forEach(img => {
-        img.addEventListener('click', function() {
-            toggleImageSelection(img);
-        });
-    });
-
-    function toggleImageSelection(img) {
-        const src = img.src;
-        if (img.style.opacity === '0.5' && !isCopying) {
-            img.style.opacity = '1.0';
-            removeCopiedImage(src, img);
-        } else {
-            if (!isCopying) {
-                img.style.opacity = '0.5';
-                copyImage(img);
-            }
+function toggleImageSelection(img) {
+    const src = img.src;
+    if (img.style.opacity === '0.5' && !isCopying) {
+        img.style.opacity = '1.0';
+        removeCopiedImage(src, img);
+    } else {
+        if (!isCopying) {
+            img.style.opacity = '0.5';
+            copyImage(img);
         }
     }
+}
 
     function copyImage(img) {
         isCopying = true;
@@ -134,7 +134,6 @@ document.addEventListener('DOMContentLoaded', function() {
             copiedImg.style.opacity = '1.0';
             copiedImg.setAttribute('data-box-shadow', originalBoxShadow);
             copiedImg.style.boxShadow = originalBoxShadow;
-            copiedImg.style.border= '2px solid black';
             copiedImagesMap[src] = {
                 element: copiedImg,
                 position: null
@@ -145,20 +144,22 @@ document.addEventListener('DOMContentLoaded', function() {
             let existingBoxWithSpace = Array.from(copiedBoxes).find(box => {
                 const boxImages = box.querySelectorAll('.copied-images img');
                 return boxImages.length < 20;
+                
             });
 
             if (existingBoxWithSpace) {
                 targetContainer = existingBoxWithSpace.querySelector('.copied-images');
             } else {
                 targetContainer = createNewCopiedBox();
-            }        
+            }
             animateImage(img, copiedImg, targetContainer);
         } else {
             isCopying = false;
         }
-    }  
+    };  
 
     function animateImage(originalImg, copiedImg, targetContainer) {
+        showBox(copiedBoxes, copiedBoxes.length - 1);
         const originalRect = originalImg.getBoundingClientRect();
         const containerRect = targetContainer.getBoundingClientRect();
     
@@ -248,28 +249,27 @@ document.addEventListener('DOMContentLoaded', function() {
                         box.parentNode.removeChild(box);
                     }
                     copiedBoxes = document.querySelectorAll('.copied-box');
-                    currentCopiedBox = Math.max(0, currentCopiedBox - 1);
-
-                    copiedBoxes.forEach((i) => {
-                        box.innerHTML = `<h3><span class="color-yellow">All</span> The <span class="color-yellow">Curses</span> You <span class="color-yellow">Selected</span> (${i + 1})</h3><div class="copied-images"></div>`;
+                    showBox(copiedBoxes, copiedBoxes.length - 1);
+                    copiedBoxes.forEach(() => {
+                        titleOfCopiedBox(box);
                     });
                 }
             });
-            if (copiedBoxes.length > 0) {
-                showBox(copiedBoxes, copiedBoxes.length - 1);
-            }
             delete copiedImagesMap[src];
         }
-    }
-    
+    }  
+        
     function createNewCopiedBox() {
         currentCopiedBox++;
         const newCopiedBox = document.createElement('div');
         newCopiedBox.classList.add('copied-box');
-        newCopiedBox.innerHTML = `<h3><span class="color-yellow">All</span> The <span class="color-yellow">Curses</span> You <span class="color-yellow">Selected</span> (${copiedBoxes.length + 1})</h3><div class="copied-images"></div>`;
+        titleOfCopiedBox(newCopiedBox);
         document.querySelector('.container').appendChild(newCopiedBox);
         copiedBoxes = document.querySelectorAll('.copied-box');
         showBox(copiedBoxes, currentCopiedBox);
         return newCopiedBox.querySelector('.copied-images');
-    }
-});
+    };
+
+function titleOfCopiedBox(e){
+    e.innerHTML = `<h3><span class="color-yellow">All</span> The <span class="color-yellow">Curses</span> You <span class="color-yellow">Selected</span> (${copiedBoxes.length + 1})</h3><div class="copied-images"></div>`;
+};

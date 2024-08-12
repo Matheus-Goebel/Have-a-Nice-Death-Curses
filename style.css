@@ -137,7 +137,7 @@ h3 {
     gap: 15px;
 }
 
-.card-images img {
+.card-images img, .copied-images img {
     width: 11vmin;
     height: 17vmin;
     border-radius: 10px;
@@ -146,40 +146,28 @@ h3 {
     border: 2px solid white;
 }
 
-.copied-images img {
-    width: 11vmin;
-    height: 17vmin;
-    max-width: 200px;
+.copied-images img {   
     border: 2px solid black;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
 }
 
 .card-images img:hover, .copied-images img:hover {
     transform: scale(1.2);
 } 
 
-.animated-clone {
+.animated-clone, .animated-clone-back {
     position: absolute;
     width: 11vmin;
     border-radius: 10px;
-    border: 2px solid white;
     height: auto;
     transition: all 0.5s ease;
     pointer-events: none;
     z-index: 1000;
+    border: 2px solid black;
 }
 
-.animated-clone-back {
-    position: absolute;
+.animated-clone-back {    
     width: 13vmin;
-    border-radius: 10px;
-    border: 2px solid black;
-    height: auto;
-    transition: all 1s ease;
-    pointer-events: none;
-    z-index: 1000;
+    transition: all 1s ease;  
 }
     
 .red-tier .card-images img {
