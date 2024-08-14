@@ -65,8 +65,8 @@ body {
     left: 50%;    
     translate: -50% -50%;
     z-index: -1;
-    padding: 2px;
-    border-radius: 10px;    
+    padding: 0.1rem;
+    border-radius: 0.5rem;    
 }
 
 .card-box::after, .card-box::before {
@@ -101,7 +101,6 @@ body {
         --angle: 0deg;
     }
 }
-
 
 .red-tier h2 {
     border-bottom: 2px solid red;
@@ -139,8 +138,8 @@ h3 {
 
 .card-images img, .copied-images img {
     width: 11vmin;
-    height: 17vmin;
-    border-radius: 10px;
+    height: auto;
+    border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.3s ease;
     border: 2px solid white;
@@ -157,7 +156,7 @@ h3 {
 .animated-clone, .animated-clone-back {
     position: absolute;
     width: 11vmin;
-    border-radius: 10px;
+    border-radius: 0.4rem;
     height: auto;
     transition: all 0.5s ease;
     pointer-events: none;
@@ -186,14 +185,12 @@ h3 {
     box-shadow: 0 0 11px purple;
 }
 
-.controls, .copy-controls {
+.controls, .copy-controls, .screenshot-button {
     display: flex;
     justify-content: center;
     gap: 10px;
     margin-top: 390px;
-    border-radius: 20px;
-    background-color: transparent;
-    
+    background-color: transparent;    
 }
 
 .controls button, .copy-controls button, .screenshot-button button {
@@ -201,9 +198,9 @@ h3 {
     white-space: nowrap;
     color: white; 
     border: 3px solid white;
-    padding: 10px 20px;
+    padding: 0.6rem 1rem;
     cursor: pointer;
-    border-radius: 20px;
+    border-radius: 2rem;
     font-size: 0.9rem;
     font-weight: bold;
     transition: all 0.5s ease;
@@ -242,9 +239,8 @@ button:hover:nth-child(2){
 .screenshot-button {
     position: absolute;
     justify-content: center;
-    top: 30%;
+    top: -10%;
     left: 46%;
-    border-radius: 20px;
     background-color: transparent;
 }
 
@@ -321,3 +317,26 @@ button span {
     -1px 1px 10px yellow,
     1px 1px 10px yellow;
 }
+
+@media (max-width: 1500px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+
+    .card-box, .copied-box {
+        left: -3%;
+        margin: 15px;
+    }
+  
+    .controls, .copy-controls, .screenshot-button {
+        flex-direction: column;
+        position: relative;
+        margin-top: 10px;
+    }
+
+    .screenshot-button {
+        left: 0%;
+        margin-top: 20px;
+    }    
+}
+   

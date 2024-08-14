@@ -20,14 +20,14 @@ function addGlobalEventListener(type, selector, callback, parent = document) {
     })
 }
 
-addGlobalEventListener("click", "button", wave => {    
-        let x = wave.clientX - wave.target.offsetLeft;
-        let y = wave.clientY - wave.target.offsetTop;
+addGlobalEventListener("click", "button", e => {    
+        let x = e.clientX - e.target.offsetLeft;
+        let y = e.clientY - e.target.offsetTop;
         
         let waves = document.createElement('span');
         waves.style.left = x + 'px';
         waves.style.top = y + 'px';
-        wave.target.appendChild(waves);
+        e.target.appendChild(waves);
 
         setTimeout(() => {
             waves.remove()
@@ -142,7 +142,6 @@ function toggleImageSelection(img) {
             let existingBoxWithSpace = Array.from(copiedBoxes).find(box => {
                 const boxImages = box.querySelectorAll('.copied-images img');
                 return boxImages.length < 20;
-                
             });
 
             if (existingBoxWithSpace) {
@@ -154,7 +153,7 @@ function toggleImageSelection(img) {
         } else {
             isCopying = false;
         }
-    };  
+    }  
 
     function animateImage(originalImg, copiedImg, targetContainer) {
         showBox(copiedBoxes, copiedBoxes.length - 1);
@@ -217,7 +216,7 @@ function toggleImageSelection(img) {
         const offset = 8; 
         return {
             x: col * (111 + offset),
-            y: row * (166 + offset)
+            y: row * (168 + offset)
         };
     }
 
@@ -236,11 +235,7 @@ function toggleImageSelection(img) {
                     let nextBoxImages = copiedBoxes[index + 1].querySelector('.copied-images').children;
                     while (boxImages.children.length < 20 && nextBoxImages.length > 0) {
                         boxImages.appendChild(nextBoxImages[0]);
-                    }
-                    if (nextBoxImages.length === 0 && copiedBoxes[index + 1].parentNode) {
-                        copiedBoxes[index + 1].parentNode.removeChild(copiedBoxes[index + 1]);
-                        copiedBoxes = document.querySelectorAll('.copied-box');
-                    }
+                    }                   
                 }
                 if (boxImages.children.length === 0 && box !== copiedBoxes[0]) {
                     if (box.parentNode) {
@@ -266,8 +261,8 @@ function toggleImageSelection(img) {
         copiedBoxes = document.querySelectorAll('.copied-box');
         showBox(copiedBoxes, currentCopiedBox);
         return newCopiedBox.querySelector('.copied-images');
-    };
+    }
 
 function titleOfCopiedBox(e){
     e.innerHTML = `<h3><span class="color-yellow">All</span> The <span class="color-yellow">Curses</span> You <span class="color-yellow">Selected</span> (${copiedBoxes.length + 1})</h3><div class="copied-images"></div>`;
-};
+}
