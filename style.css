@@ -10,7 +10,44 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-} 
+}
+
+@property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@keyframes spin {
+    from {
+        --angle: 0deg;
+    }
+    to {
+        --angle: 360deg;
+    }
+}
+
+@keyframes spin-reverse {
+    from {
+        --angle: 360deg;
+    }
+    to {
+        --angle: 0deg;
+    }
+}
+
+@keyframes animate {
+    from {
+        width: 0px;
+        height: 0px;
+        opacity: 0.2;
+    }
+    to {
+        width: 270px;
+        height: 270px;
+        opacity: 0;
+    }
+}
 
 .container {    
     display: grid;
@@ -32,31 +69,38 @@ body {
     margin-left: 30px;
     background-color: black;
     position: relative;
+    transition: all 1s ease;
 }
 
-.copied-box {
-    order: 1;
-    width: 100%;
-    padding: 20px; 
-    background-color: black;
-    border-radius: 8px;
-    max-width: 580px;
-    display: none;
-    margin-left: -5px;
-    position: relative;
+.card-box[data-status="unknown"] {
+    transform: scale(0);
+}
+
+.card-box[data-status="active"] {
+    transition-delay: 300ms;
+}
+
+.card-box[data-status="after"] {
+    transform: translateX(50%) scale(0);
+}
+
+.card-box[data-status="before"] {
+    transform: translateX(-50%) scale(0);
+}
+
+.card-box[data-status="becoming-active-from-before"] {
+    transform: translateX(-50%) scale(0);
+}
+
+.card-box[data-status="becoming-active-from-after"] {
+    transform: translateX(50%) scale(0);
 }
 
 .card-box.active, .copied-box.active {
     display: block;
 }
 
-@property --angle {
-    syntax: "<angle>";
-    initial-value: 0deg;
-    inherits: false;
-}
-
-.card-box::after, .card-box::before, .copied-box::after, .copied-box::before {
+ .card-box::after, .card-box::before, .copied-box::after, .copied-box::before {
     content: '';
     position: absolute;
     height: 100%;
@@ -69,9 +113,18 @@ body {
     border-radius: 0.5rem;    
 }
 
-.card-box::after, .card-box::before {
+.card-box::before, .copied-box::before {
+    filter: blur(1.5rem);
+    opacity: 1;
+}
+
+.card-box::before {
     background-image: conic-gradient(from var(--angle), red, blue, green, purple);
     animation: 5s spin linear infinite;
+}
+
+.card-box::after {
+    background-color: black;
 }
 
 .copied-box::after, .copied-box::before {
@@ -79,27 +132,16 @@ body {
     animation: 5s spin-reverse linear infinite;
 }
 
-.card-box::before, .copied-box::before {
-    filter: blur(1.2rem);
-    opacity: 0.8;
-}
-
-@keyframes spin {
-    from {
-        --angle: 0deg;
-    }
-    to {
-        --angle: 360deg;
-    }
-}
-
-@keyframes spin-reverse {
-    from {
-        --angle: 360deg;
-    }
-    to {
-        --angle: 0deg;
-    }
+.copied-box {
+    order: 1;
+    width: 100%;
+    padding: 20px; 
+    background-color: black;
+    border-radius: 8px;
+    max-width: 580px;
+    display: none;
+    margin-left: -5px;
+    position: relative;
 }
 
 .red-tier h2 {
@@ -265,19 +307,6 @@ button span {
     animation: animate 1s linear infinite;
 }
 
-@keyframes animate {
-    from {
-        width: 0px;
-        height: 0px;
-        opacity: 0.2;
-    }
-    to {
-        width: 270px;
-        height: 270px;
-        opacity: 0;
-    }
-}
-
 .color-red {
     color: black;
     text-shadow: -1px -1px 10px red,  
@@ -322,10 +351,15 @@ button span {
     .container {
         grid-template-columns: 1fr;
     }
-
-    .card-box, .copied-box {
+    
+    .card-box.active, .copied-box.active {
         left: -3%;
         margin: 15px;
+    }       
+    
+    .card-box{
+        margin-top: 15px;
+        margin-left: -9px;
     }
   
     .controls, .copy-controls, .screenshot-button {
